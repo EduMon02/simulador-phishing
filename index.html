@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Phishing</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="card">
+
+    <h1>🛡️ Simulador de Phishing</h1>
+
+    <!-- INICIO -->
+    <div id="inicio">
+      <p class="subtitle">
+        Aprende a identificar ataques reales de ingeniería social.
+      </p>
+      <button class="btn primary" onclick="iniciarJuego()">Comenzar</button>
+    </div>
+
+    <!-- JUEGO -->
+    <div id="juego" class="hidden">
+
+      <div class="top-bar">
+        <div class="progress-bar">
+          <div class="progress" id="barra"></div>
+        </div>
+        <div id="timer">⏱️ 10</div>
+      </div>
+
+      <div id="simulacion"></div>
+
+      <div class="actions">
+        <button class="btn danger" onclick="responder(true)">⚠️ Phishing</button>
+        <button class="btn success" onclick="responder(false)">✅ Seguro</button>
+      </div>
+
+      <p id="resultado"></p>
+      <p id="explicacion"></p>
+
+    </div>
+
+    <!-- FINAL -->
+    <div id="final" class="hidden">
+      <h2>Resultado</h2>
+      <p id="puntaje"></p>
+      <button class="btn primary" onclick="mostrarFormulario()">📄 Obtener certificado</button>
+    </div>
+
+      <div id="loginFake" class="hidden">
+    <h2>🔐 Verificación de identidad</h2>
+
+   <p style="font-size:14px; color:#94a3b8;">
+      Para generar tu certificado, inicia sesión
+    </p>
+
+    <input type="text" placeholder="Usuario">
+    <input type="password" placeholder="Contraseña">
+
+    <button class="btn primary" onclick="verificarLoginFake()">Ingresar</button>
+  </div>
+
+    <!-- FORMULARIO -->
+    <div id="formulario" class="hidden">
+      <h2>Certificado</h2>
+      <input type="text" placeholder="Nombre completo">
+      <input type="email" placeholder="Correo electrónico">
+      <input type="text" placeholder="Documento">
+      <button class="btn primary" onclick="generarCertificado()">Enviar</button>
+    </div>
+
+  </div>
+
+</div>
+
+<audio id="alertSound" src="https://www.soundjay.com/buttons/beep-02.mp3"></audio>
+
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
