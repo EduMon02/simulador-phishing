@@ -129,7 +129,7 @@ explicacion:"Oferta falsa."
 
 ];
 
-let i=0,p=0,t=10,int;
+let i=0,p=0,t=15,int;
 
 function iniciarJuego(){
 document.getElementById("inicio").classList.add("hidden");
@@ -147,7 +147,7 @@ mostrar();
 function mostrar(){
 if(i>=preguntas.length){final();return;}
 
-t=10;
+t=15;
 clearInterval(int);
 
 int=setInterval(()=>{
@@ -187,7 +187,7 @@ document.getElementById("resultado").textContent="❌ Incorrecto";
 document.getElementById("explicacion").textContent=q.explicacion;
 
 i++;
-setTimeout(mostrar,1500);
+setTimeout(mostrar,2000);
 }
 
 function final(){
@@ -207,7 +207,15 @@ document.getElementById("puntaje").textContent=`${p}/10 - ${nivel}`;
 function generarCertificado(){
   const { jsPDF } = window.jspdf;
 
-  let nombre = document.querySelector("#formulario input").value || "Usuario";
+  let inputs = document.querySelectorAll("#formulario input");
+
+  let nombre = inputs[0].value || "Usuario";
+  let documento = inputs[2].value || "Sin documento";
+
+  let nivel="";
+  if(p<=4) nivel="Bajo nivel de seguridad";
+  else if(p<=7) nivel="Nivel intermedio";
+  else nivel="Alto nivel de seguridad";
 
   const doc = new jsPDF({
     orientation: "landscape",
@@ -215,95 +223,104 @@ function generarCertificado(){
     format: "a4"
   });
 
-  // 🎨 Fondo elegante
-  doc.setFillColor(245, 247, 250);
+  // 🎨 FONDO GRADIENTE SIMULADO
+  doc.setFillColor(15, 23, 42);
   doc.rect(0, 0, 297, 210, "F");
 
-  // 🧱 Marco doble (detalle PRO)
-  doc.setDrawColor(0);
-  doc.setLineWidth(1.5);
-  doc.rect(10, 10, 277, 190);
+  // 🧱 MARCO ELEGANTE
+  doc.setDrawColor(56, 189, 248);
+  doc.setLineWidth(2);
+  doc.rect(8, 8, 281, 194);
 
+  doc.setDrawColor(255,255,255);
   doc.setLineWidth(0.5);
-  doc.rect(14, 14, 269, 182);
+  doc.rect(12, 12, 273, 186);
 
-  // 🏷️ Encabezado tipo institución
+  // 🏷️ HEADER
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
+  doc.setTextColor(56, 189, 248);
+  doc.setFontSize(14);
   doc.text("CYBERSEC ACADEMY", 20, 25);
 
-  // 🎓 Título principal
+  // 🛡️ TÍTULO
   doc.setFont("times", "bold");
-  doc.setFontSize(32);
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(34);
   doc.text("CERTIFICADO", 148, 65, { align: "center" });
 
   doc.setFontSize(20);
   doc.text("DE PARTICIPACIÓN", 148, 80, { align: "center" });
 
-  // 📄 Texto
-  doc.setFont("times", "normal");
+  // 📄 TEXTO BASE
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(14);
+  doc.setTextColor(200,200,200);
   doc.text("Se certifica que:", 148, 100, { align: "center" });
 
-  // ✍️ Nombre destacado
+  // ✍️ NOMBRE DESTACADO
   doc.setFont("times", "bolditalic");
-  doc.setFontSize(26);
+  doc.setFontSize(28);
+  doc.setTextColor(255,255,255);
   doc.text(nombre, 148, 120, { align: "center" });
 
-  // 🧠 Descripción
-  doc.setFont("times", "normal");
+  // 📊 DATOS
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(13);
+  doc.setTextColor(220,220,220);
+
+  doc.text(`Documento: ${documento}`, 148, 135, { align: "center" });
+  doc.text(`Puntaje: ${p}/10`, 148, 145, { align: "center" });
+  doc.text(`Nivel: ${nivel}`, 148, 155, { align: "center" });
+
+  // 📘 DESCRIPCIÓN
+  doc.setFontSize(11);
+  doc.setTextColor(180,180,180);
   doc.text(
-    "Ha completado exitosamente el simulador interactivo de detección de phishing, demostrando conocimientos en identificación de ataques de ingeniería social.",
+    "Ha completado exitosamente el simulador interactivo de detección de phishing, demostrando habilidades en ciberseguridad.",
     148,
-    140,
-    { align: "center", maxWidth: 230 }
+    170,
+    { align: "center", maxWidth: 220 }
   );
 
-  // 📅 Fecha
+  // 📅 FECHA
   let fecha = new Date().toLocaleDateString();
-  doc.setFontSize(11);
-  doc.text("Fecha: " + fecha, 220, 175);
+  doc.setFontSize(10);
+  doc.text("Fecha: " + fecha, 240, 185);
 
-  // ✒️ Firma simulada
-  doc.line(40, 170, 100, 170);
-  doc.text("Instructor", 55, 180);
+  // ✒️ FIRMA
+  doc.setDrawColor(255,255,255);
+  doc.line(40, 175, 100, 175);
+  doc.text("Instructor", 60, 185);
 
-  // 🏅 Sello (simulación visual)
-  doc.setDrawColor(0);
-  doc.circle(240, 120, 15);
-  doc.setFontSize(8);
+  // 🏅 SELLO PRO
+  doc.setDrawColor(56, 189, 248);
+  doc.setLineWidth(1);
+  doc.circle(240, 120, 18);
+
+  doc.setFontSize(10);
+  doc.setTextColor(56,189,248);
   doc.text("CERTIFIED", 240, 120, { align: "center" });
 
-  // 💾 Descargar
-  doc.save("Certificado_Ciberseguridad_PRO.pdf");
+  doc.save("Certificado_" + nombre.replace(/\s+/g, "_") + ".pdf");
 
-  // 🚨 ALERTA FINAL (impacto psicológico)
+  // 🚨 ALERTA FINAL
   setTimeout(()=>{
     document.getElementById("alertSound").play();
-
-    alert(
-      "🚨 ALERTA DE PHISHING 🚨\n\nAcabas de ingresar datos personales en un formulario sin verificar.\n\nAsí es como funcionan los ataques reales de ingeniería social.\n\nSiempre valida antes de confiar."
-    );
-  }, 700);
+    alert("🚨 ALERTA DE PHISHING 🚨\n\nAcabas de ingresar datos personales en un formulario sin verificar.\n\nAsí es como funcionan los ataques reales de ingeniería social.\n\nSiempre valida antes de confiar.");
+  },700);
 }
 
 function mostrarFormulario(){
-  document.getElementById("final").classList.add("hidden");
-  document.getElementById("loginFake").classList.remove("hidden");
+document.getElementById("final").classList.add("hidden");
+document.getElementById("formulario").classList.remove("hidden");
+}
+
+function mostrarLoginFake(){
+document.getElementById("final").classList.add("hidden");
+document.getElementById("loginFake").classList.remove("hidden");
 }
 
 function verificarLoginFake(){
-
-  document.getElementById("alertSound").play();
-
-  alert(
-    "🚨 HAS CAÍDO EN PHISHING 🚨\n\nAcabas de ingresar credenciales en un sitio falso.\n\nAsí funcionan los ataques reales."
-  );
-
-  // Oculta login falso
-  document.getElementById("loginFake").classList.add("hidden");
-
-  // Muestra formulario real
-  document.getElementById("formulario").classList.remove("hidden");
+document.getElementById("loginFake").classList.add("hidden");
+document.getElementById("formulario").classList.remove("hidden");
 }
